@@ -1,0 +1,47 @@
+type token =
+    WITH
+  | TYPE
+  | STAR
+  | RPAREN
+  | REC
+  | PROVE
+  | OF
+  | MATCH
+  | LPAREN
+  | LET
+  | INDUCTION
+  | IDENT of string
+  | HINT
+  | EQUAL
+  | EOF
+  | ENDCOMMENT
+  | COMMA
+  | COLON
+  | BAR
+  | AXIOM
+  | ARROW
+val menhir_begin_marker : int
+val xv_variant : Ast.typevariant
+val xv_separated_nonempty_list_STAR_IDENT_ : string list
+val xv_separated_nonempty_list_COMMA_pattern_ : Ast.pattern list
+val xv_separated_nonempty_list_BAR_variant_ : Ast.typevariant list
+val xv_separated_nonempty_list_BAR_case_ :
+  (Ast.pattern * Ast.expression) list
+val xv_separated_list_COMMA_pattern_ : Ast.pattern list
+val xv_pattern : Ast.pattern
+val xv_option_hint_ : Ast.hint option
+val xv_option_BAR_ : unit option
+val xv_main : Ast.declaration list
+val xv_loption_separated_nonempty_list_COMMA_pattern__ : Ast.pattern list
+val xv_list_declaration_ : Ast.declaration list
+val xv_list_argument_ : Ast.typedVariable list
+val xv_hint : Ast.hint
+val xv_expression_with_commas : Ast.expression
+val xv_expression_or_match : Ast.expression
+val xv_expression_eof : Ast.expression
+val xv_expression : Ast.expression
+val xv_equality : Ast.equality
+val xv_declaration : Ast.declaration
+val xv_case : Ast.pattern * Ast.expression
+val xv_argument : Ast.typedVariable
+val menhir_end_marker : int

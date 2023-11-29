@@ -1,0 +1,1 @@
+let (*prove*) cf_inv_property (h : int)= (cf (inv (cf (inv h))) = cf h)(* no hints! *)

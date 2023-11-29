@@ -1,0 +1,1 @@
+let (*prove*) inv_involution (h : int)= (inv (inv h) = h) (*hint: axiom *)

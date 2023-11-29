@@ -1,0 +1,1 @@
+let (*prove*) cf_inv_commute (h : int)= (cf (inv h) = inv (cf h))(*hint: axiom *)

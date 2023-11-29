@@ -1,0 +1,3 @@
+type list =   (* To simplify parsing, each variant starts with | *)
+| Nil
+| Cons of (int * list)

@@ -1,0 +1,20 @@
+type token =
+    VARIANT
+  | RPAREN
+  | PROVE
+  | MULT
+  | LPAREN
+  | LET
+  | IDENT of string
+  | HINT
+  | EQUALS
+  | EOF
+  | DASH
+  | COMMA
+  | COLON
+  | AXIOM
+val menhir_begin_marker : int
+val xv_main : Ast.expression list
+val xv_list_expression_ : Ast.expression list
+val xv_expression : Ast.expression
+val menhir_end_marker : int
