@@ -3,6 +3,9 @@
 (** @canonical Dune__exe.Gettingstarted *)
 module Gettingstarted = Dune__exe__Gettingstarted
 
+(** @canonical Dune__exe.Gettingstarted2 *)
+module Gettingstarted2 = Dune__exe__Gettingstarted2
+
 (** @canonical Dune__exe.Project2 *)
 module Project2 = Dune__exe__Project2
 

@@ -43,6 +43,16 @@ let rec match_expression variables pattern expression =
         | _ -> None)
     | _ -> None
 
+    let find x s = match s with
+    | [] -> failwith "Not found (find was passed an empty list)"
+    | [(k,v)] -> if x = k then v else failwith "Not found (find failed but the substitution being passed in really does not contain the variable)"
+    | _ -> failwith "Find failed (key not found because this part of the find function is utterly broken)"
+    
+    let rec substitute variables s e = match e with
+    | Identifier "x" -> find "x" s
+    | Application (e1, e2) -> Application (substitute variables s e1, substitute variables s e2)
+    | _ -> e
+
 let rec string_of_pattern (p : pattern) : string =
   match p with
   | Constructor (name, []) -> name
@@ -107,3 +117,44 @@ let string_of_declaration (d : declaration) : string =
     "let (*prove*) " ^ name ^ " " ^ (String.concat " " arg_strings) ^ " = "
      ^ string_of_equality equality ^ string_of_hint hint
 
+     let rec attempt_rewrite variables lhs rhs expression =
+      match match_expression variables lhs expression with
+        | Some s -> Some (substitute variables s rhs)
+        | None -> (match expression with
+            | Application (e1, e2) -> (match attempt_rewrite variables lhs rhs e2 with
+                | None -> None (* todo: try the other side too! *)
+                | Some e2' -> Some (Application (e1, e2')))
+            | _ -> None (* not succesful *)
+            )
+
+            let rec perform_step rules expression = match rules with
+            | (variables, nm, lhs, rhs) :: _ :: rest -> (match attempt_rewrite variables lhs rhs expression with
+                | Some e -> Some (nm, e)
+                | _ -> perform_step rest expression)
+            | _ -> None       
+
+            let rec perform_steps rules expression = match perform_step rules expression with
+  | Some (nm, e) -> (nm, e) :: perform_steps [] e
+  | None -> []
+
+  let rec prove rules lhs rhs
+  = string_of_expression lhs :: (* or Project2.string_of_expression ?? *)
+    (match perform_steps rules lhs with
+     | (nm, e) :: _ -> (" = { " ^ nm ^ " }") :: prove rules e rhs
+     | [] -> if lhs = rhs then [] else " = { ??? }" :: [string_of_expression rhs]) (* or Project2.string_of_expression ?? *)
+
+     let rec prover rules declarations =
+      match declarations with
+         | ProofDeclaration (nm, vars, Equality (lhs,rhs), None) :: rest
+            -> (* no hint, so let's prove this *)
+               prove rules lhs rhs :: prover ((vars,nm,lhs,rhs)::rules) rest
+         | ProofDeclaration (nm, vars, Equality (lhs,rhs), _) :: rest
+            -> (* we got a hint so we simply assume the statement *)
+               prover ((vars,nm,lhs,rhs)::rules) rest
+         | _ :: rest -> prover rules rest
+         | [] -> []
+   let prover_main decls =
+      prover [] decls |>
+      List.map (String.concat "\n") |>
+      String.concat "\n\n" |>
+      print_endline

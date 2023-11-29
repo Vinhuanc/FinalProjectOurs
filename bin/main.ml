@@ -91,10 +91,12 @@ let usage_msg = Sys.executable_name ^ " [--printback <filename>]"
      the middle element is code for what the argument 'does'.
    Note that "Arg.String" takes a function of type: string -> unit.
    This is where we plug in the 'with_file' function we wrote above. *)
-let speclist =
+(* let speclist =
   [("--printback", Arg.String (with_file print_all), "Print the parsed file back out")
-  ;("--simple", Arg.String (with_file (fun _x -> ())), "Parse the file, but don't print anything")]
-
+  ;("--simple", Arg.String (with_file (fun _x -> ())), "Parse the file, but don't print anything")] *)
+ let speclist =
+         [("--printback", Arg.String (with_file print_all), "Print the parsed file back out")
+         ;("--simple", Arg.String (with_file Project2.prover_main), "Parse the file, but don't print anything")]
 let _ = Arg.parse
            speclist
            (* the next argument is for parsing strings not in the speclist.
@@ -106,7 +108,7 @@ let _ = Arg.parse
            this way, no matter what was printed so far,
            we don't mess up the terminal output too badly. *)
         print_newline ()
-
+       
 (* I run this by calling:
    
 dune build
